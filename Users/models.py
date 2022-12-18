@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from phonenumber_field.modelfields import PhoneNumberField
+from django.contrib.auth import get_user_model
 
 
 
@@ -50,7 +51,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name='Avatar', default='users/default-user-image.png')
 
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Created_at')
-    updated_at = models.DateTimeField(auto_now=False, verbose_name='Update_at')
+    updated_at = models.DateTimeField(auto_now=True, verbose_name='Update_at')
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ('surname', 'first_name', 'second_name')
@@ -68,17 +69,17 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 class Team:
     name = models.CharField(max_length=50, verbose_name='Name')
-    lead = models.ForeignKey(User, on_delete=models.SET_NULL,
+    lead = models.ForeignKey(get_user_model(), on_delete=models.SET_NULL, null=True,
                              related_name='user_team_lead', verbose_name='Lead')
-    users = models.ManyToManyField(User, related_name='user_team_users',
+    users = models.ManyToManyField(get_user_model(), related_name='user_team_users',
                                    verbose_name='Users')
 
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Created_at')
-    updated_at = models.DateTimeField(auto_now=False, verbose_name='Update_at')
+    updated_at = models.DateTimeField(auto_now=True, verbose_name='Update_at')
 
     def __str__(self):
         return f'id: {self.id} | name: {self.name} | ' \
-               f'name: {self.lead.name} + " {self.lead.surname}[0]"'
+               f'lead: {self.lead.name} + " {self.lead.surname[0]}."'
 
     class Meta:
         verbose_name = 'Team'
