@@ -53,6 +53,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Created_at')
     updated_at = models.DateTimeField(auto_now=True, verbose_name='Update_at')
 
+    is_staff = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
+    is_superuser = models.BooleanField(default=False)
+
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ('surname', 'first_name', 'second_name')
 
@@ -61,13 +65,16 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return f'id: {self.id} | email: {self.email} | phone: {self.phone}'
 
+    def get_short_name(self):
+        return f'{self.first_name} {self.surname}'
+
     class Meta:
         verbose_name = 'User'
         verbose_name_plural = 'Users'
         ordering = ['-created_at']
 
 
-class Team:
+class Team(models.Model):
     name = models.CharField(max_length=50, verbose_name='Name')
     lead = models.ForeignKey(get_user_model(), on_delete=models.SET_NULL, null=True,
                              related_name='user_team_lead', verbose_name='Lead')
@@ -79,7 +86,7 @@ class Team:
 
     def __str__(self):
         return f'id: {self.id} | name: {self.name} | ' \
-               f'lead: {self.lead.name} + " {self.lead.surname[0]}."'
+               f'lead: {self.lead.name} {self.lead.surname[0]}.'
 
     class Meta:
         verbose_name = 'Team'

@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 
 
 
-class Task:
+class Task(models.Model):
     STATUS_VARIABLES = [
         (0, 'To do'),
         (1, 'In progress'),
@@ -13,7 +13,7 @@ class Task:
     name = models.CharField(max_length=100, verbose_name='Name')
     description = models.TextField(max_length=300, verbose_name='Description')
 
-    status = models.CharField(choices=STATUS_VARIABLES,
+    status = models.CharField(max_length=100, choices=STATUS_VARIABLES,
                               default='To do', verbose_name='Status')
     priority = models.IntegerField(verbose_name='Priority')
 
@@ -25,7 +25,7 @@ class Task:
 
     def __str__(self):
         return f'id: {self.id} | name: {self.name} | ' \
-               f'creator: {self.creator.name} + " {self.creator.surname[0]}."'
+               f'creator: {self.creator.name} {self.creator.surname[0]}'
 
     class Meta:
         verbose_name = 'Task'
@@ -33,7 +33,7 @@ class Task:
         ordering = ['-created_at']
 
 
-class Project:
+class Project(models.Model):
     name = models.CharField(max_length=100, verbose_name='Name')
     description = models.TextField(max_length=300, verbose_name='Description')
 
@@ -48,7 +48,7 @@ class Project:
 
     def __str__(self):
         return f'id: {self.id} | name: {self.name} | ' \
-               f'lead: {self.lead.name} + " {self.lead.surname[0]}."'
+               f'lead: {self.lead.name} {self.lead.surname[0]}'
 
     class Meta:
         verbose_name = 'Project'
