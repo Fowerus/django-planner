@@ -76,6 +76,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 class Team(models.Model):
     name = models.CharField(max_length=50, verbose_name='Name')
+    prefix = models.SlugField(max_length=50, unique=True, blank=True, verbose_name='Prefix')
     lead = models.ForeignKey(get_user_model(), on_delete=models.SET_NULL, null=True,
                              related_name='user_team_lead', verbose_name='Lead')
     users = models.ManyToManyField(get_user_model(), related_name='user_team_users',
@@ -85,8 +86,16 @@ class Team(models.Model):
     updated_at = models.DateTimeField(auto_now=True, verbose_name='Update_at')
 
     def __str__(self):
-        return f'id: {self.id} | name: {self.name} | ' \
-               f'lead: {self.lead.name} {self.lead.surname[0]}.'
+        return f'id: {self.id} | prefix: {self.prefix} | ' \
+               f'lead: {self.lead.first_name} {self.lead.surname[0]}.'
+
+    def save(self, *args, **kwargs):
+        if len(self.name.split()) > 1:
+            self.prefix = self.name.title().replace(' ', '')
+        else:
+            self.prefix = self.name
+
+        return super().save(args, kwargs)
 
     class Meta:
         verbose_name = 'Team'

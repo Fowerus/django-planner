@@ -2,11 +2,11 @@
 {% load crispy_forms_tags %}
 
 {% block body %}
-
-    <form action="/users/auth/login" method='post'>
+    <form action="/users/auth/login" method='post' class='container-sm'>
         {% csrf_token %}
         {{ form|crispy }}
-        <button type="submit" class='btn btn-primary'>Login</button>
+        <button type="submit" class='btn btn-outline-info'>Login</button>
+        <a href="/users/auth/register">Don't have an account? Create one</a>
     </form>
 
 {% endblock %}

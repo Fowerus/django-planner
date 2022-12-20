@@ -5,10 +5,10 @@ from django.contrib.auth import get_user_model
 
 class Task(models.Model):
     STATUS_VARIABLES = [
-        (0, 'To do'),
-        (1, 'In progress'),
-        (2, 'Code review'),
-        (3, 'Done')
+        ('To do', 'To do'),
+        ('In progress', 'In progress'),
+        ('Code review', 'Code review'),
+        ('Done', 'Done')
     ]
     name = models.CharField(max_length=100, verbose_name='Name')
     description = models.TextField(max_length=300, verbose_name='Description')
@@ -17,15 +17,17 @@ class Task(models.Model):
                               default='To do', verbose_name='Status')
     priority = models.IntegerField(verbose_name='Priority')
 
-    creator = models.ForeignKey(get_user_model(), on_delete=models.CASCADE,
+    creator = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, null=True,
                                 related_name='user_task_creator', verbose_name='Creator')
+    project = models.ForeignKey('Project', on_delete=models.CASCADE,
+        related_name='project_task', verbose_name='Project')
 
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Created_at')
     updated_at = models.DateTimeField(auto_now=True, verbose_name='Update_at')
 
     def __str__(self):
         return f'id: {self.id} | name: {self.name} | ' \
-               f'creator: {self.creator.name} {self.creator.surname[0]}'
+               f'creator: {self.creator.first_name} {self.creator.surname[0]}'
 
     class Meta:
         verbose_name = 'Task'
@@ -48,7 +50,7 @@ class Project(models.Model):
 
     def __str__(self):
         return f'id: {self.id} | name: {self.name} | ' \
-               f'lead: {self.lead.name} {self.lead.surname[0]}'
+               f'lead: {self.lead.first_name} {self.lead.surname[0]}'
 
     class Meta:
         verbose_name = 'Project'

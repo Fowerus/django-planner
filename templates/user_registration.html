@@ -3,10 +3,17 @@
 
 {% block body %}
 
-    <form action="/users/auth/register" method='post'>
+    <form action="/users/auth/register" method='post' class='container-sm'>
         {% csrf_token %}
         {{ form|crispy }}
         <button type="submit" class='btn btn-primary'>Create new account</button>
+        <a href="/users/auth/login">Already have an account?</a>
+        <br>
+        {% if messages %}
+            {% for message in messages %}
+            {{ message }}
+            {% endfor %}
+        {% endif %}
     </form>
 
 {% endblock %}

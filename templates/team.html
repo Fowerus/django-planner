@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block body %}
+    <br>
+    {% for block in teams %}
+        <div class="container container-sm ">
+            <h3 class=''>{{ block.name }}</h3>
+            <h5><strong>lead: {{ block.lead.get_short_name }}</strong></h5>
+            <a href="{% url 'team_check' block.prefix %}" class='btn btn-outline-info'>
+                Check team
+            </a>
+            
+        </div>
+    {% endfor %}
+{% endblock %}
