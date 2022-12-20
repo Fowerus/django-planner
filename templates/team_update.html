@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+    <title>Update {{ team.name }}</title>
+{% endblock %}
+
+{% block body %}
+
+    <form action="{% url 'team_update' team.prefix %}" method='post' class='container-sm'>
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button type="submit" class='btn btn-primary'>Update name</button>
+        <a href="{% url 'team_retrieve' team.prefix %}" class='btn btn-secondary'>Go back</a>
+        <br>
+        <br>
+        {% if messages %}
+            {% for message in messages %}
+                <p class='{{ message.tags }}'>{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+    </form>
+    <hr>
+    <div class="container-sm">
+        <form action="{% url 'team_remove_users' team.prefix %}" method="post">
+        <h3>Teammates:</h3>
+        {% csrf_token %}
+        {% for user in team.users.all %}
+            {% if request.user.id != user.id %}
+                <p>
+                    <button type='submit' class='btn btn-danger'>Delete</button>
+                    <input type="hidden" name="user_id" value='{{ user.id }}'/>
+                    {{ user.get_short_name }} ({{ user.email }})
+                </p>
+            {% endif %}
+        {% endfor %}
+        </form>
+    </div>
+
+{% endblock %}

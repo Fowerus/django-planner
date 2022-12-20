@@ -60,7 +60,7 @@ def team_list(request):
 
 
 @login_required
-def team_check(request, team_prefix):
+def team_retrieve(request, team_prefix):
     team = Team.objects.get(prefix=team_prefix)
     if request.user in team.users.all():
         team_projects = Project.objects.filter(team=team)
@@ -72,13 +72,45 @@ def team_check(request, team_prefix):
     return redirect('main')
 
 
-# @login_required
+@login_required
 def team_update(request, team_prefix):
-    pass
-    # if request.method == 'GET':
+    team = Team.objects.get(prefix=team_prefix)
+    prefix = team.prefix
+    if request.user == team.lead:
+        if request.method == 'GET':
+            form = TeamUpdateForm()
+
+            return render(request, 'team_update.html', {'form':form, 'team':team})
+        
+        elif request.method == 'POST':
+            form = TeamUpdateForm(request.POST)
+
+            try:
+                team.name = form.data['name']
+                team.save()
+                messages.success(request, "Team's name successfully changed")
+                prefix = team.prefix
+            except:
+                messages.error(request, "The team's name already taken")
+
+    return redirect('team_update', prefix)
 
 
-    # return redirect('main')   
+@login_required
+def team_remove_users(request, team_prefix):
+    if request.method == 'POST':
+        team = Team.objects.get(prefix=team_prefix)
+        if request.user == team.lead:
+            user = User.objects.get(id=request.POST.get('user_id'))
+            if request.user != user:
+                try:
+                    team.users.remove(user)
+                    team.save()
+                    messages.success(request, f'Teammate {user.get_short_name()} successfully removed from team') 
+                except:
+                    messages.error(request, f'Teammate {user.get_short_name()} not removed from team') 
+
+    return redirect('team_update', team_prefix)
 
 
 @login_required
