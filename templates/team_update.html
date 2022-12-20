@@ -22,18 +22,30 @@
     </form>
     <hr>
     <div class="container-sm">
-        <form action="{% url 'team_remove_users' team.prefix %}" method="post">
         <h3>Teammates:</h3>
-        {% csrf_token %}
-        {% for user in team.users.all %}
-            {% if request.user.id != user.id %}
-                <p>
-                    <button type='submit' class='btn btn-danger'>Delete</button>
-                    <input type="hidden" name="user_id" value='{{ user.id }}'/>
-                    {{ user.get_short_name }} ({{ user.email }})
-                </p>
-            {% endif %}
-        {% endfor %}
+        <form action="{% url 'team_add_users' team.prefix %}" method="post">
+            {% csrf_token %}
+            <div class="input-group input-group-lg mb-3">
+              <div class="input-group-prepend">
+                    <button type='submit' class='btn btn-success' class="input-group-text" id="inputGroup-sizing-lg">Add</button>
+              </div>
+              <input type="text" class="form-control" aria-label="Large" 
+              aria-describedby="inputGroup-sizing-sm" name='user_email'>
+            </div>
+
+
+        </form>
+        <form action="{% url 'team_remove_users' team.prefix %}" method="post">
+            {% csrf_token %}
+            {% for user in team.users.all %}
+                {% if request.user.id != user.id %}
+                    <p>
+                        <button type='submit' class='btn btn-danger'>Delete</button>
+                        <input type="hidden" name="user_id" value='{{ user.id }}'/>
+                        {{ user.get_short_name }} ({{ user.email }})
+                    </p>
+                {% endif %}
+            {% endfor %}
         </form>
     </div>
 

@@ -114,6 +114,23 @@ def team_remove_users(request, team_prefix):
 
 
 @login_required
+def team_add_users(request, team_prefix):
+    if request.method == 'POST':
+        team = Team.objects.get(prefix=team_prefix)
+        if request.user == team.lead:
+            user = User.objects.get(email=request.POST.get('user_email'))
+            if user not in team.users.all():
+                try:
+                    team.users.add(user)
+                    team.save()
+                    messages.success(request, f'Teammate {user.get_short_name()} ({user.email}) successfully added to team') 
+                except:
+                    messages.error(request, f'Teammate {user.get_short_name()} ({user.email}) not added to team') 
+
+    return redirect('team_update', team_prefix)
+
+
+@login_required
 def team_delete(request, team_prefix):
     team = Team.objects.get(prefix=team_prefix)
     if request.user == team.lead:
