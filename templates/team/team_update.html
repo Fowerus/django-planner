@@ -35,18 +35,17 @@
 
 
         </form>
-        <form action="{% url 'team_remove_users' team.prefix %}" method="post">
+        <div class="container-sm">
             {% csrf_token %}
             {% for user in team.users.all %}
                 {% if request.user.id != user.id %}
                     <p>
-                        <button type='submit' class='btn btn-danger'>Delete</button>
-                        <input type="hidden" name="user_id" value='{{ user.id }}'/>
+                        <a href="{% url 'team_remove_users' team.prefix user.id%}" class='btn btn-danger'>Delete</a>
                         {{ user.get_short_name }} ({{ user.email }})
                     </p>
                 {% endif %}
             {% endfor %}
-        </form>
+        </div>
     </div>
 
 {% endblock %}

@@ -19,7 +19,7 @@ class UserRegistrationForm(UserCreationForm):
         fields = ('surname', 'first_name', 'second_name', 'email')
 
 
-class TeamUpdateForm(forms.ModelForm):
+class TeamCreateUpdateForm(forms.ModelForm):
 
     class Meta:
         model = Team

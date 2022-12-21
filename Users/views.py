@@ -13,7 +13,7 @@ def log_in(request):
     if request.method == 'GET':
         form = UserLoginForm()
 
-        return render(request, 'user_login.html', {'title': 'Login','form': form })
+        return render(request, 'auth/user_login.html', {'title': 'Login','form': form })
 
     elif request.method == 'POST':
         form = UserLoginForm(request.POST)
@@ -29,8 +29,6 @@ def register(request):
     if request.method == 'GET':
         form = UserRegistrationForm()
 
-        return render(request, 'user_registration.html',
-            {'title': 'Registration','form': form })
 
     elif request.method == 'POST':
         form = UserRegistrationForm(request.POST)
@@ -43,8 +41,8 @@ def register(request):
             user.save()
             messages.success(request, 'Account has been created')
 
-        return render(request, 'user_registration.html',
-            {'title': 'Registration','form': form})
+    return render(request, 'auth/user_registration.html',
+        {'title': 'Registration','form': form})
 
 
 @login_required
@@ -56,7 +54,29 @@ def mylogout(request):
 @login_required
 def team_list(request):
     teams = Team.objects.filter(users=request.user)
-    return render(request, 'team.html', {'teams':teams})
+    return render(request, 'team/team_list.html', {'teams':teams})
+
+
+@login_required
+def team_create(request):
+    if request.method == 'GET':
+        form = TeamCreateUpdateForm()
+
+    elif request.method == 'POST':
+        form = TeamCreateUpdateForm(request.POST)
+
+        try:
+            team = Team(name=form.data['name'], lead=request.user)
+            team.save()
+            team.users.add(request.user)
+            team.save()
+            messages.success(request, "Team successfully created")
+        except:
+            messages.error(request, "Failed to create team")
+
+    return render(request, 'team/team_create.html', {'form':form})
+
+
 
 
 @login_required
@@ -65,7 +85,7 @@ def team_retrieve(request, team_prefix):
     if request.user in team.users.all():
         team_projects = Project.objects.filter(team=team)
 
-        return render(request, 'team_retrieve.html', {
+        return render(request, 'team/team_retrieve.html', {
                 'team':team, 
                 'team_projects': team_projects
             })
@@ -78,12 +98,12 @@ def team_update(request, team_prefix):
     prefix = team.prefix
     if request.user == team.lead:
         if request.method == 'GET':
-            form = TeamUpdateForm()
+            form = TeamCreateUpdateForm()
 
-            return render(request, 'team_update.html', {'form':form, 'team':team})
+            return render(request, 'team/team_update.html', {'form':form, 'team':team})
         
         elif request.method == 'POST':
-            form = TeamUpdateForm(request.POST)
+            form = TeamCreateUpdateForm(request.POST)
 
             try:
                 team.name = form.data['name']
@@ -97,18 +117,17 @@ def team_update(request, team_prefix):
 
 
 @login_required
-def team_remove_users(request, team_prefix):
-    if request.method == 'POST':
-        team = Team.objects.get(prefix=team_prefix)
-        if request.user == team.lead:
-            user = User.objects.get(id=request.POST.get('user_id'))
-            if request.user != user:
-                try:
-                    team.users.remove(user)
-                    team.save()
-                    messages.success(request, f'Teammate {user.get_short_name()} successfully removed from team') 
-                except:
-                    messages.error(request, f'Teammate {user.get_short_name()} not removed from team') 
+def team_remove_users(request, team_prefix, user_id):
+    team = Team.objects.get(prefix=team_prefix)
+    if request.user == team.lead:
+        user = User.objects.get(id=user_id)
+        if request.user != user:
+            try:
+                team.users.remove(user)
+                team.save()
+                messages.success(request, f'Teammate {user.get_short_name()} successfully removed from team') 
+            except:
+                messages.error(request, f'Teammate {user.get_short_name()} not removed from team') 
 
     return redirect('team_update', team_prefix)
 
