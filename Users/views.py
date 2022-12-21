@@ -173,10 +173,11 @@ def proposal_accept_decline(request, prop_id, answer):
                 proposal.project.team = proposal.team
                 proposal.project.save()
                 messages.success(request, 'Proposal accepted')
-
+            else:
+                messages.error(request, 'Proposal declined')
             proposal.delete()
     except:
-        messages.error('Failed to accept or decline proposal')
+        messages.error(request, 'Failed to accept or decline proposal')
 
     return redirect('proposal_list')
 

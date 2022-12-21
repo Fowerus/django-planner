@@ -20,6 +20,7 @@
                 <h5>For project</h5>
                 <p>{{ proposal.project.name }}</p>
                 <p>{{ proposal.project.description }}</p>
+                <p>{{ proposal.created_at }}</p>
 
                 <a href="{% url 'proposal_accept_decline' proposal.id 1 %}" class='btn btn-outline-info'>
                     Accept</a>

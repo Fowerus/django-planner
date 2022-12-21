@@ -16,6 +16,9 @@ class Task(models.Model):
                               default='To do', verbose_name='Status')
     priority = models.IntegerField(verbose_name='Priority')
 
+    executor = models.ForeignKey(get_user_model(), on_delete=models.SET_NULL, null=True,
+        related_name='user_task_executor', verbose_name='Executor')
+
     creator = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, null=True,
                                 related_name='user_task_creator', verbose_name='Creator')
     project = models.ForeignKey('Project', on_delete=models.CASCADE,
