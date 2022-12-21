@@ -6,37 +6,46 @@
 {% endblock %}
 
 {% block body %}
-    <div class="container">
-        <div>
-            <h3>{{ team.name }}</h3>
-            <h5><strong>lead: {{ team.lead.get_short_name }} ({{ team.lead.email }})</strong></h5>
-            <h3>teammate:</h3>
-            <ul>
-                {% for teammate in team.users.all %}
-                    <li>{{ teammate.get_short_name }} ({{ teammate.email }})</li>
-                {% endfor %}
-            </ul>
-            {% if request.user.is_authenticated %}
-                {% if request.user.id == team.lead.id %}
-                    <a href="{% url 'team_update' team.prefix %}" class='btn btn-info'>
-                        Update team</a>
-                    <a href="{% url 'team_delete' team.prefix %}" class='btn btn-danger'>
-                        Delete team</a>
+    <div class="container container-sm">
+        <div class="row">
+            <div class="col-md-4">
+                <h2>{{ team.name }}</h2>
+                <h5>[{{ team.prefix }}]</h5>
+                <p>Lead: {{ team.lead.get_short_name }} ({{ team.lead.email }})</p>
+                <h4>teammate:</h4>
+                <ul>
+                    {% for teammate in team.users.all %}
+                        <li>{{ teammate.get_short_name }} ({{ teammate.email }})</li>
+                    {% endfor %}
+                </ul>
+                {% if request.user.is_authenticated %}
+                    {% if request.user.id == team.lead.id %}
+                        <div class="btn-group">
+                        <a href="{% url 'team_update' team.prefix %}" class='btn btn-info'>
+                            Update team</a></p>
+                        <a href="{% url 'team_delete' team.prefix %}" class='btn btn-danger'>
+                            Delete team</a></p>
+                        </div>
+                    {% endif %}
                 {% endif %}
-            {% endif %}
-        </div>
-        <hr>
-        <h3 class=''>Projects:</h3>
-        {% for project in team_projects %}
-            <div class="container-sm">
-                <h3>{{ project.name }}</h3>
-                <h5>{{ project.description }}</h5>
-                <h5><strong>lead: {{ project.lead.get_short_name }} ({{ project.lead.email }})</strong></h5>
-                <a href="" class='btn btn-outline-info'>
-                    Check project
-                </a>
             </div>
+            <br>
+        </div>
+        <div class="container-sm">
+            <br>
+            <h3>Projects:</h3>
             <hr>
-        {% endfor %}
+            {% for project in team_projects %}
+                <div class="container-sm">
+                    <h4>{{ project.name }}</h4>
+                    <h6>{{ project.description }}</h6>
+                    <h6>lead: {{ project.lead.get_short_name }} ({{ project.lead.email }})</h6>
+                    <a href="{% url 'project_retrieve' project.prefix %}" class='btn btn-outline-info'>
+                        Check project
+                    </a>
+                </div>
+                <hr>
+            {% endfor %}  
+        </div>
     </div>
 {% endblock %}

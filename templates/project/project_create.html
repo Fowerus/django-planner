@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+    <title>Create a new project</title>
+{% endblock %}
+
+{% block body %}
+
+    <form action="{% url 'project_create' %}" method='post' class='container-sm'>
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button type="submit" class='btn btn-primary'>Create project</button>
+        <a href="{% url 'project_list' %}" class='btn btn-secondary'>Go back</a>
+        <br>
+        <br>
+        {% if messages %}
+            {% for message in messages %}
+                <p class='{{ message.tags }}'>{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+    </form>
+
+{% endblock %}

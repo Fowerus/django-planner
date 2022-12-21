@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 from .forms import *
-from .models import Team
+from .models import Team, Proposal
 from Projects.models import Project
 
 
@@ -59,10 +59,7 @@ def team_list(request):
 
 @login_required
 def team_create(request):
-    if request.method == 'GET':
-        form = TeamCreateUpdateForm()
-
-    elif request.method == 'POST':
+    if request.method == 'POST':
         form = TeamCreateUpdateForm(request.POST)
 
         try:
@@ -71,11 +68,13 @@ def team_create(request):
             team.users.add(request.user)
             team.save()
             messages.success(request, "Team successfully created")
+
+            return redirect('team_update', team.prefix)
         except:
             messages.error(request, "Failed to create team")
 
+    form = TeamCreateUpdateForm()
     return render(request, 'team/team_create.html', {'form':form})
-
 
 
 
@@ -156,4 +155,48 @@ def team_delete(request, team_prefix):
         team.delete()
 
     return redirect('team_list')   
+
+
+@login_required
+def proposal_list(request):
+    proposals = Proposal.objects.filter(team__lead=request.user)
+    
+    return render(request, 'proposal/proposal_list.html', {'proposals':proposals})
+
+
+@login_required
+def proposal_accept_decline(request, prop_id, answer):
+    try:
+        proposal = Proposal.objects.get(id = prop_id)
+        if request.user == proposal.team.lead:
+            if answer == 1:
+                proposal.project.team = proposal.team
+                proposal.project.save()
+                messages.success(request, 'Proposal accepted')
+
+            proposal.delete()
+    except:
+        messages.error('Failed to accept or decline proposal')
+
+    return redirect('proposal_list')
+
+
+@login_required
+def proposal_send(request, project_prefix):
+    if request.method == 'POST':
+        try:
+            project = Project.objects.get(prefix=project_prefix)
+            if request.user == project.lead:
+                team = Team.objects.get(prefix=request.POST.get('team_prefix'))
+
+                proposal = Proposal(project=project, team=team)
+                proposal.save()
+                messages.success(request, 'Proposal successfully sent')
+
+        except:
+            messages.error(request, 'Failed to send proposal')
+
+    return redirect('project_retrieve', project_prefix)
+
+
 

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+    <title>Proposals</title>
+{% endblock %}
+
+{% block body %}
+
+    <div class="container container-sm">
+        {% if messages %}
+            {% for message in messages %}
+                <p class='{{ message.tags }}'>{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+        <div class="row">
+        {% for proposal in proposals %}
+            <div class="col-md-4">
+                <h2>{{ proposal.team.name }}</h2>
+                <h5>For project</h5>
+                <p>{{ proposal.project.name }}</p>
+                <p>{{ proposal.project.description }}</p>
+
+                <a href="{% url 'proposal_accept_decline' proposal.id 1 %}" class='btn btn-outline-info'>
+                    Accept</a>
+                <a href="{% url 'proposal_accept_decline' proposal.id 0 %}" class='btn btn-outline-info'>
+                    Decline</a>
+            </div>
+            <br>
+        {% endfor %}
+        </div>
+    </div>
+{% endblock %}

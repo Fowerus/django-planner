@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+    <title>Update {{ project.name }}</title>
+{% endblock %}
+
+{% block body %}
+
+    <form action="{% url 'project_update' project.prefix %}" method='post' class='container-sm'>
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button type="submit" class='btn btn-primary'>Update project</button>
+        <a href="{% url 'project_retrieve' project.prefix %}" class='btn btn-secondary'>Go back</a>
+        <br>
+        <br>
+        {% if messages %}
+            {% for message in messages %}
+                <p class='{{ message.tags }}'>{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+        <hr>
+        <br>
+        <form action="{% url 'project_add_team' project.prefix %}" method="post">
+            <div class="input-group input-group-lg mb-3">
+                <div class="input-group-prepend">
+                    <button type='submit' class='btn btn-success' class="input-group-text" id="inputGroup-sizing-lg">Add</button>
+                </div>
+                <input type="text" class="form-control" aria-label="Large" 
+                aria-describedby="inputGroup-sizing-sm" name='user_email'>
+            </div>
+        </form>
+    <hr>
+
+{% endblock %}

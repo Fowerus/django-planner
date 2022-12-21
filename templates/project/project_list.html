@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+    <title>Projects</title>
+{% endblock %}
+
+{% block body %}
+    <div class="container container-sm">
+        <a href="{% url 'project_create' %}" class='btn btn-info'>Create project</a>
+        <br>
+        <br>
+        <div class="row">
+        {% for project in projects %}
+            <div class="col-md-4">
+                <h2>{{ project.name }}</h2>
+                <p>Lead: {{ project.lead.get_short_name }} ({{ project.lead.email }})</p>
+                <p>Team: {{ project.team.name }} [{{ project.team.prefix }}]</p>
+                <p>{{ project.description }}</p>
+                <a href="{% url 'project_retrieve' project.prefix %}" class='btn btn-outline-info'>
+                    Check project
+                </a>
+            </div>
+            <br>
+        {% endfor %}
+        </div>
+        <br>
+    </div>
+{% endblock %}

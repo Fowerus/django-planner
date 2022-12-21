@@ -6,19 +6,23 @@
 {% endblock %}
 
 {% block body %}
+
     <div class="container container-sm">
         <a href="{% url 'team_create' %}" class='btn btn-info'>Create team</a>
+        <a href="{% url 'proposal_list' %}" class='btn btn-info'>Proposals</a>
         <br>
         <br>
-        {% for block in teams %}
-            <div>
-                <h3>{{ block.name }}</h3>
-                <h5><strong>lead: {{ block.lead.get_short_name }} ({{ block.lead.email }})</strong></h5>
-                <a href="{% url 'team_retrieve' block.prefix %}" class='btn btn-outline-info'>
-                    Check team
-                </a>
+        <div class="row">
+        {% for team in teams %}
+            <div class="col-md-4">
+                <h2>{{ team.name }}</h2>
+                <h5>[{{ team.prefix }}]</h5>
+                <p>Lead: {{ team.lead.get_short_name }} ({{ team.lead.email }})</p>
+                <p><a href="{% url 'team_retrieve' team.prefix %}" class='btn btn-outline-info'>
+                    Check team</a></p>
             </div>
             <br>
         {% endfor %}
+        </div>
     </div>
 {% endblock %}

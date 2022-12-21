@@ -95,9 +95,29 @@ class Team(models.Model):
         else:
             self.prefix = self.name
 
-        return super().save(args, kwargs)
+        return super(Team, self).save(args, kwargs)
 
     class Meta:
         verbose_name = 'Team'
         verbose_name_plural = 'Teams'
         ordering = ['-created_at']
+
+
+class Proposal(models.Model):
+    team = models.ForeignKey(Team, on_delete=models.CASCADE,
+        related_name='project_proposal_team', verbose_name='Team')
+    project = models.ForeignKey('Projects.Project', on_delete=models.CASCADE,
+        related_name='project_proposal_project', verbose_name='Project')
+
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Created_at')
+    updated_at = models.DateTimeField(auto_now=True, verbose_name='Update_at')
+
+    def __str__(self):
+        return f'id: {self.id} | team: {self.team.id} | ' \
+               f'project: {self.project.id}'
+
+
+    class Meta:
+        verbose_name='Proposal'
+        verbose_name_plural='Proposals'
+        ordering=['-created_at']
