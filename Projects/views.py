@@ -109,7 +109,7 @@ def task_main(request, project_prefix):
 @login_required
 def task_retrieve(request, task_id):
 	task = Task.objects.get(id=task_id)
-	if request.user==task.project.lead and request.user in task.project.team.users.all():
+	if request.user==task.project.lead or request.user in task.project.team.users.all():
 
 		return render(request, 'task/task_retrieve.html', {
 				'task': task
