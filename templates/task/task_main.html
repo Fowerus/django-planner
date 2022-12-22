@@ -51,6 +51,9 @@
                                     Accept step</a>
                                 <a href="{% url 'task_accept_delete' item.id 0 %}" class='btn btn-outline-danger'>
                                     Delete task</a>
+                            {% elif request.user == item.executor %}
+                                <a href="{% url 'task_accept_delete' item.id 1 %}" class='btn btn-outline-success'>
+                                    Accept step</a>
                             {% endif %}
                         {% endif %}
                     </div>
@@ -93,6 +96,9 @@
                                     Accept step</a>
                                 <a href="{% url 'task_accept_delete' item.id 0 %}" class='btn btn-outline-danger'>
                                     Delete task</a>
+                            {% elif request.user == item.executor %}
+                                <a href="{% url 'task_accept_delete' item.id 1 %}" class='btn btn-outline-success'>
+                                    Accept step</a>
                             {% endif %}
                         {% endif %}
                     </div>
