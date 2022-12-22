@@ -2,16 +2,16 @@
 {% load crispy_forms_tags %}
 
 {% block title %}
-    <title>Update {{ project.name }}</title>
+    <title>Create a new task</title>
 {% endblock %}
 
 {% block body %}
 
-    <form action="{% url 'project_update' project.prefix %}" method='post' class='container-sm'>
+    <form action="{% url 'task_create' project_prefix %}" method='post' class='container-sm'>
         {% csrf_token %}
         {{ form|crispy }}
-        <button type="submit" class='btn btn-primary'>Update project</button>
-        <a href="{% url 'project_retrieve' project.prefix %}" class='btn btn-secondary'>Go back</a>
+        <button type="submit" class='btn btn-primary'>Create project</button>
+        <a href="{% url 'task_main' project_prefix %}" class='btn btn-secondary'>Go back</a>
         <br>
         <br>
         {% if messages %}
@@ -19,6 +19,6 @@
                 <p class='{{ message.tags }}'>{{ message }}</p>
             {% endfor %}
         {% endif %}
-    <hr>
+    </form>
 
 {% endblock %}

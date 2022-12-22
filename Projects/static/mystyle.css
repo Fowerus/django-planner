@@ -1,0 +1,46 @@
+.mycontainer {
+	max-width: 1300px;
+	display: flex;
+	margin: 0 auto 0;
+	justify-content: space-between;
+}
+
+.mycolumn {
+	max-width: 300px;
+	display: flex;
+	flex-direction: column;
+	text-align: center;
+	width: 100%;
+}
+.myelem {
+	text-align: left;
+	padding: 0px 30px 0px 30px;
+	border-left: 1px solid black;
+	border-right: 1px solid black;
+	border-bottom: 1px solid black;
+}
+.myelem:last-child{
+	border-bottom: none;
+}
+
+.myitem {
+	border-bottom: 1px solid black;
+	padding-bottom: 10px;
+}
+.myitem a{
+	font-size: 10px;
+}
+.myitem:last-child{
+	border: none;
+}
+
+.mybtn-group {
+	margin: 15px auto 0;
+	max-width: inherit;
+	display: flex;
+	justify-content: space-between;
+	flex-wrap: wrap;
+}
+.mybtn-group a {
+	font-size: 10px;
+}

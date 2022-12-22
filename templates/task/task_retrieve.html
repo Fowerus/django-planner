@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+    <title>{{ task.name }}</title>
+{% endblock %}
+
+{% block body %}
+    <div class="container container-sm">
+        <a href="{% url 'task_main' task.project.prefix %}" class='btn btn-secondary'>Go back</a>
+    </div>
+        <br>
+        <br>
+    <div class="container container-sm">
+        {% if messages %}
+            {% for message in messages %}
+                <p class='{{ message.tags }}'>{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+        <div class="row">
+            <div class="col-md-4">
+                <h4>{{ task.name }}</h4>
+                <p>{{ task.description }}</p>
+                <p>{{ task.executor.get_short_name }} [{{task.executor.email}}]</p>
+            </div>
+            <br>
+        </div>
+    </div>
+{% endblock %}

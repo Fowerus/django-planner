@@ -17,7 +17,7 @@ class Task(models.Model):
     priority = models.IntegerField(verbose_name='Priority')
 
     executor = models.ForeignKey(get_user_model(), on_delete=models.SET_NULL, null=True,
-        related_name='user_task_executor', verbose_name='Executor')
+        blank=True, related_name='user_task_executor', verbose_name='Executor')
 
     creator = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, null=True,
                                 related_name='user_task_creator', verbose_name='Creator')
@@ -34,7 +34,7 @@ class Task(models.Model):
     class Meta:
         verbose_name = 'Task'
         verbose_name_plural = 'Tasks'
-        ordering = ['-created_at']
+        ordering = ['-updated_at']
 
 
 class Project(models.Model):

@@ -1,0 +1,169 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+    <title>Projects</title>
+{% endblock %}
+
+{% block body %}
+    <div class="container container-sm">
+        {% if request.user == project.lead %}
+            <a href="{% url 'task_create' project.prefix %}" class='btn btn-info'>Create task</a>
+        {% endif %}
+            <a href="{% url 'project_retrieve' project.prefix %}" class='btn btn-secondary'>Go back</a>
+    </div>
+        <br>
+        <br>
+
+    <div class="container mycontainer">
+        <div class="mycolumn">
+            <h4>To do</h4>
+            <div class="myelem">
+            {% for item in todo %}
+                <div class="myitem">
+                    <p>{{ item.name }}</p>
+                    <p>{{ item.description }}</p>
+                    <p>Priority: {{ item.priority }}</p>
+                    {% if not item.executor %}
+                        <form action="{% url 'task_add_remove_executor' item.id 1 %}" method="post">
+                            {% csrf_token %}
+                            <div class="input-group input-group-sm mb-3">
+                                <input type="text" class="form-control" aria-label="Small" 
+                                aria-describedby="inputGroup-sizing-sm" name="user_email_{{item.id}}">
+                                <div class="input-group-prepend">
+                                    <button type='submit' class='btn btn-outline-success' class="input-group-text" id="inputGroup-sizing-sm">Add executor</a>
+                                </div>
+                            </div> 
+                        </form>
+                        {% else %}
+                            <p>Executor: {{ item.executor.get_short_name }} 
+                            <a href="{% url 'task_add_remove_executor' item.id 0 %}" class="btn btn-outline-danger btn-sm">Delete</a>
+                        {% endif %}
+                    <div class="mybtn-group">
+                        <a href="{% url 'task_retrieve' item.id %}" class='btn btn-outline-info'>Check task</a>
+                        {% if request.user.is_authenticated %}
+                            {% if request.user.id == item.project.lead.id %}
+                                <a href="{% url 'task_accept_delete' item.id 1 %}" class='btn btn-outline-success'>
+                                    Accept step</a>
+                                <a href="{% url 'task_accept_delete' item.id 0 %}" class='btn btn-outline-danger'>
+                                    Delete task</a>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+            </div>
+        </div>
+        <div class="mycolumn">
+            <h4>In progress</h4>
+            <div class="myelem">
+            {% for item in in_progress %}
+                <div class="myitem">
+                    <p>{{ item.name }}</p>
+                    <p>{{ item.description }}</p>
+                    <p>Priority: {{ item.priority }}</p>
+                    {% if not item.executor %}
+                        <form action="{% url 'task_add_remove_executor' item.id 1 %}" method="post">
+                            {% csrf_token %}
+                            <div class="input-group input-group-sm mb-3">
+                                <input type="text" class="form-control" aria-label="Small" 
+                                aria-describedby="inputGroup-sizing-sm" name="user_email_{{item.id}}">
+                                <div class="input-group-prepend">
+                                    <button type='submit' class='btn btn-outline-success' class="input-group-text" id="inputGroup-sizing-sm">Add executor</a>
+                                </div>
+                            </div> 
+                        </form>
+                        {% else %}
+                            <p>Executor: {{ item.executor.get_short_name }} 
+                            <a href="{% url 'task_add_remove_executor' item.id 0 %}" class="btn btn-outline-danger btn-sm">Delete</a>
+                        {% endif %}
+                    <div class="mybtn-group">
+                        <a href="{% url 'task_retrieve' item.id %}" class='btn btn-outline-info'>Check task</a>
+                        {% if request.user.is_authenticated %}
+                            {% if request.user.id == item.project.lead.id %}
+                                <a href="{% url 'task_accept_delete' item.id 1 %}" class='btn btn-outline-success'>
+                                    Accept step</a>
+                                <a href="{% url 'task_accept_delete' item.id 0 %}" class='btn btn-outline-danger'>
+                                    Delete task</a>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+            </div>
+        </div>
+        <div class="mycolumn">
+            <h4>Code review</h4>
+            <div class="myelem">
+            {% for item in code_review %}
+                <div class="myitem">
+                    <p>{{ item.name }}</p>
+                    <p>{{ item.description }}</p>
+                    <p>Priority: {{ item.priority }}</p>
+                    {% if not item.executor %}
+                        <form action="{% url 'task_add_remove_executor' item.id 1 %}" method="post">
+                            {% csrf_token %}
+                            <div class="input-group input-group-sm mb-3">
+                                <input type="text" class="form-control" aria-label="Small" 
+                                aria-describedby="inputGroup-sizing-sm" name="user_email_{{item.id}}">
+                                <div class="input-group-prepend">
+                                    <button type='submit' class='btn btn-outline-success' class="input-group-text" id="inputGroup-sizing-sm">Add executor</a>
+                                </div>
+                            </div> 
+                        </form>
+                        {% else %}
+                            <p>Executor: {{ item.executor.get_short_name }} 
+                            <a href="{% url 'task_add_remove_executor' item.id 0 %}" class="btn btn-outline-danger btn-sm">Delete</a>
+                        {% endif %}
+                    <div class="mybtn-group">
+                        <a href="{% url 'task_retrieve' item.id %}" class='btn btn-outline-info'>Check task</a>
+                        {% if request.user.is_authenticated %}
+                            {% if request.user.id == item.project.lead.id %}
+                                <a href="{% url 'task_accept_delete' item.id 1 %}" class='btn btn-outline-success'>
+                                    Accept step</a>
+                                <a href="{% url 'task_accept_delete' item.id 0 %}" class='btn btn-outline-danger'>
+                                    Delete task</a>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+            </div>
+        </div>
+        <div class="mycolumn">
+            <h4>Done</h4>
+            <div class="myelem">
+            {% for item in done %}
+                <div class="myitem">
+                    <p>{{ item.name }}</p>
+                    <p>{{ item.description }}</p>
+                    <p>Priority: {{ item.priority }}</p>
+                    {% if not item.executor %}
+                        <form action="{% url 'task_add_remove_executor' item.id 1 %}" method="post">
+                            {% csrf_token %}
+                            <div class="input-group input-group-sm mb-3">
+                                <input type="text" class="form-control" aria-label="Small" 
+                                aria-describedby="inputGroup-sizing-sm" name="user_email_{{item.id}}">
+                                <div class="input-group-prepend">
+                                    <button type='submit' class='btn btn-outline-success' class="input-group-text" id="inputGroup-sizing-sm">Add executor</a>
+                                </div>
+                            </div> 
+                        </form>
+                        {% else %}
+                            <p>Executor: {{ item.executor.get_short_name }} 
+                            <a href="{% url 'task_add_remove_executor' item.id 0 %}" class="btn btn-outline-danger btn-sm">Delete</a>
+                        {% endif %}
+                    <div class="mybtn-group">
+                        <a href="{% url 'task_retrieve' item.id %}" class='btn btn-outline-info'>Check task</a>
+                        {% if request.user.is_authenticated %}
+                            {% if request.user.id == item.project.lead.id %}
+                                <a href="{% url 'task_accept_delete' item.id 0 %}" class='btn btn-outline-danger'>
+                                    Delete task</a>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

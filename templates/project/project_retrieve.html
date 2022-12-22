@@ -19,11 +19,11 @@
                 {% if not project.team %}
                 <form action="{% url 'proposal_send' project.prefix %}" method="post">
                     {% csrf_token %}
-                    <div class="input-group input-group-lg mb-3">
+                    <div class="input-group input-group-sm mb-3">
                         <div class="input-group-prepend">
-                            <button type='submit' class='btn btn-success' class="input-group-text" id="inputGroup-sizing-lg">Send proposal</button>
+                            <button type='submit' class='btn btn-success' class="input-group-text" id="inputGroup-sizing-sm">Send proposal</button>
                         </div>
-                        <input type="text" class="form-control" aria-label="Large" 
+                        <input type="text" class="form-control" aria-label="Small" 
                         aria-describedby="inputGroup-sizing-sm" name='team_prefix'>
                     </div>
                 </form>
@@ -37,16 +37,18 @@
                         <li>{{ teammate.get_short_name }} ({{ teammate.email }})</li>
                     {% endfor %}
                 </ul>
-                {% if request.user.is_authenticated %}
-                    {% if request.user.id == project.lead.id %}
-                        <div class="btn-group">
-                        <a href="{% url 'project_update' project.prefix %}" class='btn btn-info'>
-                            Update project</a></p>
-                        <a href="{% url 'project_delete' project.prefix %}" class='btn btn-danger'>
-                            Delete project</a></p>
-                        </div>
+                <div class="btn-group">
+                    <a href="{% url 'task_main' project.prefix %}" class='btn btn-success'>
+                        Tasks</a></p>
+                    {% if request.user.is_authenticated %}
+                        {% if request.user.id == project.lead.id %}
+                            <a href="{% url 'project_update' project.prefix %}" class='btn btn-info'>
+                                Update project</a></p>
+                            <a href="{% url 'project_delete' project.prefix %}" class='btn btn-danger'>
+                                Delete project</a></p>
+                        {% endif %}
                     {% endif %}
-                {% endif %}
+                </div>
             </div>
             <br>
         </div>
