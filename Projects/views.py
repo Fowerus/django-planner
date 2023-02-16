@@ -155,6 +155,7 @@ def task_add_remove_executor(request, task_id, answer):
 		if request.user == task.project.lead:
 			if request.method == 'POST':	
 				if answer == 1:
+					print(request.POST.get(f'user_email_{task_id}'))
 					user = get_user_model().objects.get(email=request.POST.get(f'user_email_{task_id}'))
 					if user in task.project.team.users.all():
 						task.executor = user
@@ -165,7 +166,8 @@ def task_add_remove_executor(request, task_id, answer):
 					task.save()
 
 		return redirect('task_main', task.project.prefix)
-	except:
+	except Exception as er:
+		print(er)
 		return redirect('project_list')
 
 
@@ -190,3 +192,34 @@ def task_accept_delete(request, task_id, answer):
 		return redirect('project_list')
 
 
+@login_required
+def task_prev_step(request, task_id):
+	try:
+		task = Task.objects.get(id = task_id)
+		if request.user == task.project.lead:
+			l = {'In progress':'To do',
+			'Code review':'In progress', 'Done':'Code review'}
+
+			if task.status != 'To do':
+				task.status = l.get(task.status)
+				task.save()
+
+		return redirect('task_main', task.project.prefix)
+	except:
+		return redirect('project_list')
+
+
+@login_required
+def project_remove_team(request, project_prefix):
+	try:
+		project = Project.objects.get(prefix=project_prefix)
+
+		if request.user == project.lead:
+			project.team = None
+			project.save()
+
+	except:
+		pass
+
+	finally:
+		return redirect('project_retrieve', project_prefix)

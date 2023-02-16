@@ -40,7 +40,7 @@
                         {% else %}
                             <p>Executor: {{ item.executor.get_short_name }} 
                             {% if request.user == item.project.lead %}
-                            <a href="{% url 'task_add_remove_executor' item.id 0 %}" class="btn btn-outline-danger btn-sm">Delete</a>
+                            <a href="{% url 'task_add_remove_executor' item.id 0 %}" class="btn btn-outline-danger btn-sm">Remove</a>
                             {% endif %}
                         {% endif %}
                     <div class="mybtn-group">
@@ -85,7 +85,7 @@
                         {% else %}
                             <p>Executor: {{ item.executor.get_short_name }} 
                             {% if request.user == item.project.lead %}
-                            <a href="{% url 'task_add_remove_executor' item.id 0 %}" class="btn btn-outline-danger btn-sm">Delete</a>
+                            <a href="{% url 'task_add_remove_executor' item.id 0 %}" class="btn btn-outline-danger btn-sm">Remove</a>
                             {% endif %}
                         {% endif %}
                     <div class="mybtn-group">
@@ -94,6 +94,8 @@
                             {% if request.user.id == item.project.lead.id %}
                                 <a href="{% url 'task_accept_delete' item.id 1 %}" class='btn btn-outline-success'>
                                     Accept step</a>
+                                <a href="{% url 'task_prev_step' item.id %}" class='btn btn-outline-info'>
+                                    Previous step</a>
                                 <a href="{% url 'task_accept_delete' item.id 0 %}" class='btn btn-outline-danger'>
                                     Delete task</a>
                             {% elif request.user == item.executor %}
@@ -130,7 +132,7 @@
                         {% else %}
                             <p>Executor: {{ item.executor.get_short_name }} 
                             {% if request.user == item.project.lead %}
-                            <a href="{% url 'task_add_remove_executor' item.id 0 %}" class="btn btn-outline-danger btn-sm">Delete</a>
+                            <a href="{% url 'task_add_remove_executor' item.id 0 %}" class="btn btn-outline-danger btn-sm">Remove</a>
                             {% endif %}
                         {% endif %}
                     <div class="mybtn-group">
@@ -139,6 +141,8 @@
                             {% if request.user.id == item.project.lead.id %}
                                 <a href="{% url 'task_accept_delete' item.id 1 %}" class='btn btn-outline-success'>
                                     Accept step</a>
+                                <a href="{% url 'task_prev_step' item.id %}" class='btn btn-outline-info'>
+                                    Previous step</a>
                                 <a href="{% url 'task_accept_delete' item.id 0 %}" class='btn btn-outline-danger'>
                                     Delete task</a>
                             {% endif %}
@@ -172,13 +176,15 @@
                         {% else %}
                             <p>Executor: {{ item.executor.get_short_name }} 
                             {% if request.user == item.project.lead %}
-                            <a href="{% url 'task_add_remove_executor' item.id 0 %}" class="btn btn-outline-danger btn-sm">Delete</a>
+                            <a href="{% url 'task_add_remove_executor' item.id 0 %}" class="btn btn-outline-danger btn-sm">Remove</a>
                             {% endif %}
                         {% endif %}
                     <div class="mybtn-group">
                         <a href="{% url 'task_retrieve' item.id %}" class='btn btn-outline-info'>Check task</a>
                         {% if request.user.is_authenticated %}
                             {% if request.user.id == item.project.lead.id %}
+                                <a href="{% url 'task_prev_step' item.id %}" class='btn btn-outline-info'>
+                                    Previous step</a>
                                 <a href="{% url 'task_accept_delete' item.id 0 %}" class='btn btn-outline-danger'>
                                     Delete task</a>
                             {% endif %}

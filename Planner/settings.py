@@ -41,6 +41,7 @@ INSTALLED_APPS = [
 
     'phonenumber_field',
     'crispy_forms',
+    'crispy_bootstrap5',
 
     'Users',
     'Projects'
@@ -137,4 +138,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Project's settings
 AUTH_USER_MODEL = 'Users.User'
 
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"

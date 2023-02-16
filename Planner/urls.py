@@ -23,3 +23,5 @@ urlpatterns = [
     path('users/', include('Users.urls')),
     path('Projects/', include('Projects.urls'))
 ]
+
+handler404 = "Planner.views.page_not_found_view"

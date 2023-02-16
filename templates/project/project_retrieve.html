@@ -28,7 +28,8 @@
                     </div>
                 </form>
                 {% else %}
-                    <p>Team: {{ project.team.name }} [{{ project.team.prefix }}]</p>
+                    <p>Team: {{ project.team.name }} [{{ project.team.prefix }}]
+                    <a href="{% url 'project_remove_team' project.prefix %}" class="btn btn-outline-danger btn-sm">Remove</a>
                 {% endif %}
                 <p>{{ project.description }}</p>
                 <h4>teammate:</h4>
